@@ -14,6 +14,7 @@ import { env } from '@/infra/config/env'
 import { errorHandler } from '@/shared/errors/error-handler'
 import { authenticationWithPassword } from './infra/http/auth/authentication-with-password/authentication-with-password.controller'
 import { createAccount } from './infra/http/auth/create-account/create-account.controller'
+import { getProfile } from './infra/http/auth/get-profile/get-profile.controller'
 
 const envToLogger = {
   development: {
@@ -78,5 +79,6 @@ app.register(fastifyHelmet)
 
 app.register(createAccount)
 app.register(authenticationWithPassword)
+app.register(getProfile)
 
 export { app }
