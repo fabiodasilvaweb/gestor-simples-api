@@ -12,7 +12,9 @@ export default defineConfig({
     environment: 'node',
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html'],
+      reporter: [['text', { skipFull: false }], 'html'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/generated/**', 'src/**/*.spec.ts', 'src/server.ts'],
     },
   },
 })
