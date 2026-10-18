@@ -1,4 +1,5 @@
 import fastifyCors from '@fastify/cors'
+import fastifyHelmet from '@fastify/helmet'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
@@ -11,9 +12,26 @@ import {
 } from 'fastify-type-provider-zod'
 import { env } from '@/infra/config/env'
 import { errorHandler } from '@/shared/errors/error-handler'
+import { authenticationWithPassword } from './infra/http/auth/authentication-with-password/authentication-with-password.controller'
 import { createAccount } from './infra/http/auth/create-account/create-account.controller'
 
-const app = fastify().withTypeProvider<ZodTypeProvider>()
+const envToLogger = {
+  development: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
+  production: true,
+  test: false,
+}
+
+const app = fastify({
+  logger: envToLogger[env.NODE_ENV],
+}).withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
@@ -56,7 +74,9 @@ app.register(fastifyJwt, {
 })
 
 app.register(fastifyCors)
+app.register(fastifyHelmet)
 
 app.register(createAccount)
+app.register(authenticationWithPassword)
 
 export { app }
