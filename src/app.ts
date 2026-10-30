@@ -15,6 +15,10 @@ import { errorHandler } from '@/shared/errors/error-handler'
 import { authenticationWithPassword } from './infra/http/auth/authentication-with-password/authentication-with-password.controller'
 import { createAccount } from './infra/http/auth/create-account/create-account.controller'
 import { getProfile } from './infra/http/auth/get-profile/get-profile.controller'
+import { createBoard } from './infra/http/boards/create-board/create-board.controller'
+import { deleteBoard } from './infra/http/boards/delete-board/delete-board.controller'
+import { getBoards } from './infra/http/boards/get-boards/get-boards.controller'
+import { updateBoard } from './infra/http/boards/update-board/update-board.controller'
 
 const envToLogger = {
   development: {
@@ -77,8 +81,15 @@ app.register(fastifyJwt, {
 app.register(fastifyCors)
 app.register(fastifyHelmet)
 
+// Auth routes
 app.register(createAccount)
 app.register(authenticationWithPassword)
 app.register(getProfile)
+
+// Boards routes
+app.register(createBoard)
+app.register(getBoards)
+app.register(updateBoard)
+app.register(deleteBoard)
 
 export { app }
